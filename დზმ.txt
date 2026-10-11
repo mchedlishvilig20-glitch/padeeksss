@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ჩემი პადექსი</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  color: #96345f;
+  background: linear-gradient(135deg, #222222, #69001f, #111111);
+  overflow-x: hidden;
+}
+
+main {
+  width: min(720px, 92%);
+  margin: auto;
+  padding: 38px 0 55px;
+}
+
+h1 {
+  font-size: clamp(40px, 9vw, 68px);
+  color: #c52e78;
+}
+
+.subtitle {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.heart {
+  font-size: 130px;
+  cursor: pointer;
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.14); }
+}
+
+.card {
+  margin-top: 25px;
+  padding: 26px 20px;
+  border-radius: 25px;
+  background: #ffffffd9;
+  box-shadow: 0 12px 35px #bd477526;
+  line-height: 2;
+}
+
+button {
+  margin: 8px;
+  padding: 13px 20px;
+  border: 0;
+  border-radius: 25px;
+  background: #e94f91;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.float {
+  position: fixed;
+  bottom: -45px;
+  animation: rise 5s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes rise {
+  to {
+    transform: translateY(-110vh) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+#message {
+  font-weight: bold;
+  min-height: 1.5em;
+}
+</style>
+</head>
+
+<body>
+<main>
+
+  <p>ვეჩნად ერთად</p>
+
+  <h1>ბალშოი სიყვარულით მჭედლოსგან</h1>
+
+  <p class="subtitle">
+    
+  </p>
+
+  <div class="web" id="web">❤️</div>
+
+  <section class="card">
+
+    <h2>შემოგევლოს ჩემი სიცოცხლე</h2>
+
+    <p>
+      მიყვარხარ შეჩჩ<br>
+      ჩემი ცხოვრებახარ ტოო<br>
+      დაიხსომე ყლეზე მაღლა ნუ ახტები<br><br>
+      ბურა ბუქნებზე
+    </p>
+
+    <button id="surprise"> პადარკა</button>
+
+    <button id="music">♫ ჯუზუკები</button>
+
+    <p id="message"></p>
+
+  </section>
+
+  <p>ქურდებს სიცოცხლე</p>
+
+</main>
+
+<script>
+const heart = document.getElementById("heart");
+const message = document.getElementById("message");
+
+function floatingHeart() {
+  const h = document.createElement("span");
+
+  h.className = "float";
+
+  h.textContent = ["💗", "💖", "💕", "💘", "🌸"][
+    Math.floor(Math.random() * 5)
+  ];
+
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = (20 + Math.random() * 25) + "px";
+
+  document.body.appendChild(h);
+
+  setTimeout(() => h.remove(), 5000);
+}
+
+setInterval(floatingHeart, 650);
+
+heart.onclick = () => {
+  message.textContent = მიყვარხარ პადეეე ❤️";
+
+  for (let i = 0; i < 10; i++) {
+    setTimeout(floatingHeart, i * 100);
+  }
+};
+
+document.getElementById("surprise").onclick = () => {
+  message.textContent = "პედექს 💗";
+
+  for (let i = 0; i < 15; i++) {
+    setTimeout(floatingHeart, i * 100);
+  }
+};
+
+// მუსიკის ღილაკი
+let audio = gio pika-gdze ti;
+let timer = null;
+let note = 0;
+
+const notes = [523, 659, 784, 659, 587, 698, 880, 698];
+
+function playNote() {
+  const osc = audio.createOscillator();
+  const gain = audio.createGain();
+
+  osc.type = "sine";
+  osc.frequency.value = notes[note++ % notes.length];
+
+  gain.gain.setValueAtTime(0.06, audio.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audio.currentTime + 0.35
+  );
+
+  osc.connect(gain);
+  gain.connect(audio.destination);
+
+  osc.start();
+  osc.stop(audio.currentTime + 0.36);
+}
+
+document.getElementById("music").onclick = async function() {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+
+    await audio.suspend();
+
+    this.textContent = "♫ მუსიკის ჩართვა ქურდულად";
+    return;
+  }
+
+  audio = audio || new AudioContext();
+
+  await audio.resume();
+
+  playNote();
+
+  timer = setInterval(playNote, 450);
+
+  this.textContent = "♫ მუსიკის ზადნის მიცემა";
+};
+</script>
+
+</body>
+</html>
